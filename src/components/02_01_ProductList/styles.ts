@@ -1,9 +1,11 @@
 import styled from 'styled-components'
 import { Props } from './index'
-import { Cores } from '../../styles'
+import { breakpoints, Cores } from '../../styles'
 import { Card } from '../X2_Product/styles'
 
-export const Container = styled.section<Omit<Props, 'title' | 'games'>>`
+export const Container = styled.section<
+  Omit<Props, 'title' | 'games' | 'isLoading'>
+>`
   padding: 32px 0;
   background-color: ${(props) =>
     props.background === 'black' ? Cores.corPreto : Cores.corCinza};
@@ -19,6 +21,14 @@ export const List = styled.ul`
   grid-template-columns: 1fr 1fr 1fr 1fr;
   gap: 24px;
   margin-top: 40px;
+
+  @media (mex-width: ${breakpoints.desktop}) {
+    grid-template-columns: 1fr 1fr;
+  }
+
+  @media (mex-width: ${breakpoints.tablet}) {
+    grid-template-columns: 1fr;
+  }
 `
 export const Title = styled.h2`
   font-size: 18px;

@@ -1,23 +1,17 @@
-import { useEffect, useState } from 'react'
-import { Game } from '../../pages/01_Home'
-
-import * as S from './styles'
 import Tag from '../X3_Tag'
 import Button from '../X1_Button'
+import Loader from '../X5_Loader'
 
-import { formataPreco } from '../03_ProductList'
+import { useGetFeaturedGameQuery } from '../../services/api'
+import { parseToBrl } from '../../utils'
+
+import * as S from './styles'
 
 const Banner = () => {
-  const [game, setGame] = useState<Game>()
-
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/eplay/destaque')
-      .then((res) => res.json())
-      .then((res) => setGame(res))
-  }, [])
+  const { data: game } = useGetFeaturedGameQuery()
 
   if (!game) {
-    return <h3>Carregando...</h3>
+    return <Loader />
   }
 
   return (
@@ -27,9 +21,9 @@ const Banner = () => {
         <div>
           <S.Titulo>{game.name}</S.Titulo>
           <S.Precos>
-            De <span>{formataPreco(game.prices.old)}</span>
+            De <span>{parseToBrl(game.prices.old)}</span>
             <br />
-            por apenas {formataPreco(game.prices.current)}
+            por apenas {parseToBrl(game.prices.current)}
           </S.Precos>
         </div>
         <Button

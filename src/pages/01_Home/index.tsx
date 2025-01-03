@@ -1,56 +1,29 @@
-import { useEffect, useState } from 'react'
+import { useGetOnSaleQuery, useGetSoonQuery } from '../../services/api'
 
-import Banner from '../../components/02_Banner'
-import ProductsList from '../../components/03_ProductList'
-
-export interface GalleryItem {
-  type: 'image' | 'video'
-  url: string
-}
-
-export type Game = {
-  id: number
-  name: string
-  description: string
-  release_date?: string
-  prices: {
-    discount?: number
-    old?: number
-    current?: number
-  }
-  details: {
-    category: string
-    system: string
-    developer: string
-    publisher: string
-    languages: string[]
-  }
-  media: {
-    thumbnail: string
-    cover: string
-    gallery: GalleryItem[]
-  }
-}
+import Banner from '../../components/01_02_Banner'
+import ProductsList from '../../components/02_01_ProductList'
 
 const Home = () => {
-  const [promocoes, setPromocoes] = useState<Game[]>([])
-  const [emBreve, setEmBreve] = useState<Game[]>([])
-
-  useEffect(() => {
-    fetch('https://fake-api-tau.vercel.app/api/eplay/promocoes')
-      .then((res) => res.json())
-      .then((res) => setPromocoes(res))
-
-    fetch('https://fake-api-tau.vercel.app/api/eplay/em-breve')
-      .then((res) => res.json())
-      .then((res) => setEmBreve(res))
-  }, [])
+  const { data: onSaleGames, isLoading: isLoadingSale } = useGetOnSaleQuery()
+  const { data: soonGames, isLoading: isLoadingSoon } = useGetSoonQuery()
 
   return (
     <>
       <Banner />
-      <ProductsList title="Promoções" background="gray" games={promocoes} />
-      <ProductsList title="Em Breve" background="black" games={emBreve} />
+      <ProductsList
+        id="on-sale"
+        title="Promoções"
+        background="gray"
+        games={onSaleGames}
+        isLoading={isLoadingSale}
+      />
+      <ProductsList
+        id="coming-soon"
+        title="Em Breve"
+        background="black"
+        games={soonGames}
+        isLoading={isLoadingSoon}
+      />
     </>
   )
 }
